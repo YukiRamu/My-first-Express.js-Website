@@ -1,28 +1,33 @@
 //import node module, express module and make an instance
 const express = require("express");
 const app = express();
+require("dotenv").config();
+const indexRouter = require("./routes/index"); //router
+const dashboardRouter = require("./routes/dashboard");//router
+const { auth } = require('express-openid-connect'); //auth0
 const port = 3000;
 const os = require("os");
 const path = require("path");
 
-//function 
-const getOsData = () => {
-  const osData = {
-    "CPUArchitecture": os.arch(),
-    "CPU": os.cpus(),
-    "endianessOfCPU": os.endianness(),
-    "freeMemory": os.freemem(),
-    "totalMemory": os.totalmem(),
-    "loadAverage": os.loadavg(),
-    "networkInterface": os.networkInterfaces(),
-    "platform": os.platform(),
-    "releaseInfo": os.release(),
-    "Type": os.type(),
-    "userInfo": os.userInfo()
-  };
-  return osData;
+//Auth0 config 
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SECRET,
+  baseURL: process.env.BASEURL,
+  clientID: process.env.CLIENTID,
+  issuerBaseURL: process.env.ISSUER
 };
 
+//set view engine
+app.set("views", "views");
+app.set("view engine", "ejs");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.use(auth(config));
+
+//function
 const getPathData = () => {
   const pathData = {
     'basename': path.basename('./dir/test.txt'),
@@ -35,30 +40,10 @@ const getPathData = () => {
   return pathData;
 };
 
-/* Set the engine */
-app.set("view engine", "ejs");
-
 /* Routing configuration */
-app.get("/", (req, res) => {
-  //create data
-  const osData = getOsData();
-  console.log(osData);
-  //rendering the page
-  res.render("index", { data: osData });
-});
-
-app.get("/path", (req, res) => {
-  const pathData = getPathData();
-  console.log(pathData);
-  res.render("path", { data: pathData });
-});
+app.use("/", indexRouter);
+app.use("/dashboard", dashboardRouter);
 
 app.listen(port, () => {
   console.log(`Application is running at http://localhost:${port}`);
 });
-
-
-// A. Fs module
-// B. Path module
-// C. Events
-// D. Assert

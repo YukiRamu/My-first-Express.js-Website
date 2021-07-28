@@ -1,20 +1,26 @@
+<html>
+
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <link rel="stylesheet" href="../public/stylesheets/style.css">
+</head>
+
 <body>
   <div class="container">
     <h1>Welcome to My First Express.js App :) </h1>
-    <p>Current user is <%=data["userInfo"]["username"] %></p>
-
-    <!-- OS info -->
-    <h2>About My Operation System</h2>
-    <p>CPU Architecture is <%=data["CPUArchitecture"] %></p>
-    <p>Type of OS is <%=data["Type"] %></p>
-    <p>CPU model is <%=data["CPU"].map(e=>e.model)%></p>
-    <p>CPU speed is <%=data["CPU"].map(e=>e.speed) %></p>
-    <p>endianess of CPU is <%=data["endianessOfCPU"] %></p>
-    <p>Free memory is <%=data["freeMemory"] %></p>
-    <p>Total memory is <%=data["totalMemory"] %></p>
-
-    <!-- Network Info -->
-    <h2>About Network Interface</h2>
-    <p></p>
+    <nav>
+      <ul>
+        <% if (!isAuthenticated) { %>
+          <li><a href="/login">Login</a></li>
+          <% } else { %>
+            <li><a href="/logout">Log Out</a></li>
+            <li><a href="/dashboard">Go to dashboard</a></li>
+            <%}%>
+      </ul>
+    </nav>
   </div>
 </body>
+
+</html>
