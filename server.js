@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const os = require("os");
+const path = require("path");
 const chromelogger = require('chromelogger');
 const { Server } = require("http");
 
@@ -10,8 +11,8 @@ const { Server } = require("http");
 app.use(chromelogger.middleware);
 
 //function 
-const getData = () => {
-  const data = {
+const getOsData = () => {
+  const osData = {
     "CPUArchitecture": os.arch(),
     "CPU": os.cpus(),
     "endianessOfCPU": os.endianness(),
@@ -24,7 +25,19 @@ const getData = () => {
     "Type": os.type(),
     "userInfo": os.userInfo()
   };
-  return data;
+  return osData;
+};
+
+const getPathData = () => {
+  const pathData = {
+    'basename': path.basename('./dir/test.txt'),
+    'dirname': path.dirname('./dir/test.txt'),
+    'extname': path.extname('./dir/test.txt'),
+    'parse': path.parse('./dir/test.txt'),
+    'join': path.join('dir', 'dir2', 'test.txt'),
+    'relative': path.relative('./dir', './dir2/test.txt')
+  };
+  return pathData;
 };
 
 //set the engine
@@ -32,11 +45,16 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   //create data
-  const data = getData();
-  res.chrome.log(req);
-  console.log(data);
+  const osData = getOsData();
+  console.log(osData);
   //rendering the page
-  res.render("index", { data: data });
+  res.render("index", { data: osData });
+});
+
+app.get("/path", (req, res) => {
+  const pathData = getPathData();
+  console.log(pathData);
+  res.render("path", { data: pathData });
 });
 
 app.listen(port, () => {
