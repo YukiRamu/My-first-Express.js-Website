@@ -4,11 +4,6 @@ const app = express();
 const port = 3000;
 const os = require("os");
 const path = require("path");
-const chromelogger = require('chromelogger');
-const { Server } = require("http");
-
-//console.log on Chrome
-app.use(chromelogger.middleware);
 
 //function 
 const getOsData = () => {
@@ -40,9 +35,10 @@ const getPathData = () => {
   return pathData;
 };
 
-//set the engine
+/* Set the engine */
 app.set("view engine", "ejs");
 
+/* Routing configuration */
 app.get("/", (req, res) => {
   //create data
   const osData = getOsData();
