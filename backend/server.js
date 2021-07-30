@@ -1,11 +1,14 @@
 //import node module, express module and make an instance
 const express = require("express");
 const app = express();
+const port = 5000;
 require("dotenv").config();
+
 const indexRouter = require("./routes/index"); //router
 const dashboardRouter = require("./routes/dashboard");//router
 const { auth } = require('express-openid-connect'); //auth0
-const port = 3000;
+
+//import node modules
 const os = require("os");
 const path = require("path");
 
@@ -27,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(auth(config));
 
-//function
+//function - not used
 const getPathData = () => {
   const pathData = {
     'basename': path.basename('./dir/test.txt'),

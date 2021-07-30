@@ -23,10 +23,12 @@ const getOsData = () => {
 // **** Path should be "/" = /dashboard
 router.get("/", (req, res) => {
   const osData = getOsData();
-  res.render("dashboard", {
-    "title": "Express Dashboard",
-    data: osData
-  });
+  res.send({ data: osData });
+  console.log(osData);
+  // res.render("dashboard", {
+  //   "title": "Express Dashboard",
+  //   data: osData
+  // });
 });
 
 module.exports = router;
